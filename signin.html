@@ -1,0 +1,23 @@
+<head>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+<body style="margin: 0px; background-color: #f1f1f1; display: flex; flex-direction: row; align-items: center; justify-content: center;">
+    <div style="border-radius: 5px; height: 300px; width: 200px; border: 1px solid #e4e4e7; background-color: #ffffff; box-shadow: rgba(9, 30, 66, 0.25) 0px 4px 8px -2px, rgba(9, 30, 66, 0.08) 0px 0px 0px 1px;">
+        <input id="emailbox" type="email" />
+        <input id="passwordbox" type="password" />
+        <button onclick="loginuser()">
+            Signin
+        </button>
+    </div>
+    <script>
+        const { createClient } = supabase
+        const sbc = createClient('https://fzxvknkpfouvjtfxbnkh.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ6eHZrbmtwZm91dmp0ZnhibmtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc5ODQ1MDgsImV4cCI6MjA1MzU2MDUwOH0.jHJFkSetGgkOFfxcSMyWpsY8htPqcAYnw48xfRuoo6k')
+        var loginuser = async function() {
+            const { data, error } = await sbc.auth.signInWithPassword({
+                email: document.getElementById("emailbox").value,
+                password: document.getElementById("passwordbox").value,
+            })
+        }
+
+    </script>
+</body>

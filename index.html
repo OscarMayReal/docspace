@@ -1,0 +1,16 @@
+<head>
+    <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+</head>
+<body style="margin: 0px;">
+    <div style="height: 60px; border-bottom: 1px solid #e4e4e7; background-color: #f1f1f1; width: 100%;"></div>
+        <script>
+            const { createClient } = supabase
+            const sbc = createClient('https://fzxvknkpfouvjtfxbnkh.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ6eHZrbmtwZm91dmp0ZnhibmtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc5ODQ1MDgsImV4cCI6MjA1MzU2MDUwOH0.jHJFkSetGgkOFfxcSMyWpsY8htPqcAYnw48xfRuoo6k')
+            sbc.auth.getSession()
+                .then(res => {
+                    if (res.data.session == null) {
+                        console.log("signed out")
+                    }
+                })
+        </script>
+</body>
