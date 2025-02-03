@@ -26,7 +26,7 @@
         sbc.auth.getSession()
             .then(async (res) => {
                 if (res.data.session == null) {
-                    window.location.replace("/signin.html?callback=" + window.location.toString())
+                    window.location.replace("/docspace/signin.html?callback=" + window.location.toString())
                 } else {
                     console.log(res)
                     document.querySelector(".userarea-email").innerHTML = res.data.session.user.email;
