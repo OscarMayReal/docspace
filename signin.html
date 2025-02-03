@@ -8,8 +8,13 @@
         <button onclick="loginuser()">
             Signin
         </button>
+        <button onclick="signupuser()">
+            Signup
+        </button>
     </div>
     <script>
+        const params = new URLSearchParams(document.location.search);
+        const redirurl = params.get("callback");
         const { createClient } = supabase
         const sbc = createClient('https://fzxvknkpfouvjtfxbnkh.supabase.co', 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZ6eHZrbmtwZm91dmp0ZnhibmtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Mzc5ODQ1MDgsImV4cCI6MjA1MzU2MDUwOH0.jHJFkSetGgkOFfxcSMyWpsY8htPqcAYnw48xfRuoo6k')
         var loginuser = async function() {
@@ -17,6 +22,18 @@
                 email: document.getElementById("emailbox").value,
                 password: document.getElementById("passwordbox").value,
             })
+            window.location.replace(redirurl)
+        }
+
+        var signupuser = async function() {
+            const { data, error } = await sbc.auth.signUp({
+                email: document.getElementById("emailbox").value,
+                password: document.getElementById("passwordbox").value,
+            })
+            if (!error) {
+                loginuser()
+            }
+            window.location.replace(redirurl)
         }
 
     </script>
