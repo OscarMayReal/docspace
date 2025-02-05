@@ -1,5 +1,6 @@
 <head>
     <script src="https://unpkg.com/@supabase/supabase-js@2"></script>
+    <script src="components.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/editorjs@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/header@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/@editorjs/list@latest"></script>
@@ -17,6 +18,9 @@
         <div class="sidebarpagelist"></div>
     </div>
     <div id="mainarea"></div>
+    <div id="infooverlay">
+        <div id="infooverlaybox"></div>
+    </div>
     <script>
         var doneinit = false
         var editor = ""
@@ -67,13 +71,25 @@
         }
 
         var loadpage = function(id) {
-            editorinit()
-            currentid = id
-            sbc.from("Pages").select("*").eq("id", id)
-                .then((res) => {
-                    console.log(res)
-                    editor.render(res.data[0].content)
+            try {
+                savepage(() => {
+                    editorinit()
+                    currentid = id
+                    sbc.from("Pages").select("*").eq("id", id)
+                        .then((res) => {
+                            console.log(res)
+                            editor.render(res.data[0].content)
+                        })
                 })
+            } catch {
+                editorinit()
+                currentid = id
+                sbc.from("Pages").select("*").eq("id", id)
+                    .then((res) => {
+                        console.log(res)
+                        editor.render(res.data[0].content)
+                    })
+            }
         }
 
         var reloadsidebar = function() {
@@ -82,9 +98,10 @@
                 .then((res) => {
                     console.log(res)
                     res.data.forEach(element => {
-                        newdiv = document.createElement("div")
-                        newdiv.classList.add("sidebarpageitem")
+                        newdiv = document.createElement("ds-sidebar-pageitem")
+                        // newdiv.classList.add("sidebarpageitem")
                         newdiv.setAttribute("onclick", "loadpage(" + element.id + ")")
+                        newdiv.setAttribute("docid", element.id)
                         newdiv.setAttribute("oncontextmenu", "event.preventDefault(); deletepage(" + element.id + ")")
                         newdiv.innerHTML = element.name
                         document.querySelector(".sidebarpagelist").append(newdiv)
@@ -102,7 +119,7 @@
                 })
         }
 
-        var savepage = function() {
+        var savepage = function(callback) {
             editor.save()
                 .then((outputData) => {
                     console.log('Article data: ', outputData)
@@ -120,7 +137,7 @@
                                 console.error('Save error: ', res.error)
                             } else {
                                 console.log('Update successful:', res.data);
-                                fetchUpdatedData(currentid);
+                                callback()
                             }
                         })
                 })
@@ -152,7 +169,7 @@
         }
 
         document.querySelector(".sidebarpagecreate").addEventListener("click", createpage)
-        document.querySelector(".sidebarpagelist").addEventListener("click", savepage)
+        // document.querySelector(".sidebarpagelist").addEventListener("click", savepage)
         document.querySelector(".userarea-email").addEventListener("click", signout)
 
         let hasChanges = false;
